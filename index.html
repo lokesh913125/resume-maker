@@ -595,7 +595,7 @@
 <div class="toast" id="toast"></div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// ── STATE ─────────────────────────────────────────────────────
+  // ── STATE ─────────────────────────────────────────────────────
 let skills = [];
 let langs = [];
 let eduCount = 0;
@@ -639,6 +639,29 @@ window.addEdu = function addEdu() {
   wrap.appendChild(div);
   update();
 }
+function update () {
+  // Update Education List in Resume
+  const eduCards = document.querySelectorAll('[id^="edu-"]');
+  const eduList = document.getElementById('r-edu-list');
+  if (eduCards.length === 0) {
+    eduList.innerHTML = '<p class="r-empty">Add your education →</p>';
+  } else {
+    eduList.innerHTML = Array.from(eduCards).map(card => {
+      const inputs = card.querySelectorAll('input, select');
+      const degree = inputs[0]?.value || '—';
+      const school = inputs[1]?.value || '—';
+      const year = inputs[2]?.value || '';
+      const marks = inputs[3]?.value || '';
+      return `<div class="r-edu-card">
+        <div class="r-edu-degree">${degree}</div>
+        <div class="r-edu-school">${school}</div>
+        <div class="r-edu-meta">
+          ${year ? `<span>${year}</span>` : ''}
+          ${marks ? `<span class="r-edu-marks">${marks}</span>` : ''}
+        </div>
+      </div>`;
+});
+}}
 
 window.addExp = function addExp() {
   const id = ++expCount;
@@ -836,3 +859,17 @@ window.clearAll = function clearAll() {
   eduCount = 0; expCount = 0;
   update();
   showToast('✅ Form cleared!');
+}
+
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+</script>
+</body>
+
+</html>
