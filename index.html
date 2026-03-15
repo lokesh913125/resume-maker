@@ -462,6 +462,29 @@
     <!-- BASIC -->
     <div class="form-section active" id="tab-basic">
       <div class="section-heading">Personal Info</div>
+
+      <!-- AI BOX -->
+      <div style="background:linear-gradient(135deg,#1A1A2E,#2D1B4E);border-radius:12px;padding:18px;margin-bottom:20px;border:1px solid rgba(200,16,46,0.3)">
+        <div style="font-size:0.8rem;font-weight:700;color:#FF80C8;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;">✨ AI Summary Generator</div>
+        <div class="form-row" style="margin-bottom:10px">
+          <label style="color:rgba(255,255,255,0.6)">Job Role / Position applying for *</label>
+          <input type="text" id="f-jobrole" placeholder="e.g. Software Engineer, Bank Manager, Teacher..." style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);color:white;" oninput="update()"/>
+        </div>
+        <div class="form-row" style="margin-bottom:12px">
+          <label style="color:rgba(255,255,255,0.6)">Years of Experience</label>
+          <select id="f-experience" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);color:white;">
+            <option value="fresher">Fresher (0 years)</option>
+            <option value="1-2">1-2 Years</option>
+            <option value="3-5">3-5 Years</option>
+            <option value="5+">5+ Years</option>
+          </select>
+        </div>
+        <button onclick="generateAISummary()" id="ai-btn" style="width:100%;padding:11px;background:linear-gradient(135deg,#C8102E,#E91E8C);color:white;border:none;border-radius:8px;font-weight:700;font-size:0.9rem;font-family:'Source Sans 3',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+          <span id="ai-btn-text">✨ Generate AI Summary & Description</span>
+        </button>
+        <div id="ai-status" style="font-size:0.78rem;color:rgba(255,255,255,0.4);text-align:center;margin-top:8px;display:none"></div>
+      </div>
+
       <div class="form-row"><label>Full Name *</label><input type="text" id="f-name" placeholder="Rahul Kumar Sharma" oninput="update()"/></div>
       <div class="form-row"><label>Job Title / Designation</label><input type="text" id="f-title" placeholder="Software Engineer / MBA Graduate" oninput="update()"/></div>
       <div class="form-grid-2">
@@ -473,7 +496,7 @@
         <div class="form-row"><label>State</label><input type="text" id="f-state" placeholder="Maharashtra" oninput="update()"/></div>
       </div>
       <div class="form-row"><label>LinkedIn (optional)</label><input type="text" id="f-linkedin" placeholder="linkedin.com/in/rahulkumar" oninput="update()"/></div>
-      <div class="form-row"><label>Objective / Summary</label><textarea id="f-summary" placeholder="Motivated and detail-oriented software engineer with 2+ years of experience..." oninput="update()"></textarea></div>
+      <div class="form-row"><label>Objective / Summary</label><textarea id="f-summary" placeholder="Click 'Generate AI Summary' above to auto-fill this..." oninput="update()"></textarea></div>
     </div>
 
     <!-- EDUCATION -->
@@ -531,7 +554,7 @@
           <div class="r-designation" id="r-designation">Job Title / Designation</div>
           <div class="r-contact-row">
             <div class="r-contact-item" id="r-phone"><span class="icon">📞</span> +91 XXXXX XXXXX</div>
-            <div class="r-contact-item" id="r-email"><span class="icon">✉️</span> email@gmail.com</div>
+            <div class="r-contact-item" id="r-email"><span class="icon">✉️</span> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="94f1f9f5fdf8d4f3f9f5fdf8baf7fbf9">[email&#160;protected]</a></div>
             <div class="r-contact-item" id="r-location"><span class="icon">📍</span> City, State</div>
             <div class="r-contact-item" id="r-linkedin" style="display:none"><span class="icon">🔗</span> <span id="r-li-text"></span></div>
           </div>
@@ -590,7 +613,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── STATE ─────────────────────────────────────────────────────
 let skills = [];
 let langs = [];
@@ -598,7 +621,7 @@ let eduCount = 0;
 let expCount = 0;
 
 // ── TABS ──────────────────────────────────────────────────────
-function showTab(id) {
+window.showTab = function showTab(id) {
   document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + id).classList.add('active');
@@ -606,7 +629,7 @@ function showTab(id) {
 }
 
 // ── EDUCATION ────────────────────────────────────────────────
-function addEdu() {
+window.addEdu = function addEdu() {
   const id = ++eduCount;
   const wrap = document.getElementById('edu-entries');
   const div = document.createElement('div');
@@ -636,7 +659,7 @@ function addEdu() {
   update();
 }
 
-function addExp() {
+window.addExp = function addExp() {
   const id = ++expCount;
   const wrap = document.getElementById('exp-entries');
   const div = document.createElement('div');
@@ -656,13 +679,13 @@ function addExp() {
   update();
 }
 
-function removeEntry(id) {
+window.removeEntry = function removeEntry(id) {
   document.getElementById(id)?.remove();
   update();
 }
 
 // ── SKILLS ────────────────────────────────────────────────────
-function addSkill() {
+window.addSkill = function addSkill() {
   const inp = document.getElementById('skill-input');
   const val = inp.value.trim();
   if (!val || skills.includes(val)) return;
@@ -672,7 +695,7 @@ function addSkill() {
   update();
 }
 
-function removeSkill(s) {
+window.removeSkill = function removeSkill(s) {
   skills = skills.filter(x => x !== s);
   renderSkillTags();
   update();
@@ -683,7 +706,7 @@ function renderSkillTags() {
   wrap.innerHTML = skills.map(s => `<span class="skill-tag">${s}<button onclick="removeSkill('${s}')">✕</button></span>`).join('');
 }
 
-function addLang() {
+window.addLang = function addLang() {
   const inp = document.getElementById('lang-input');
   const val = inp.value.trim();
   if (!val || langs.includes(val)) return;
@@ -693,7 +716,7 @@ function addLang() {
   update();
 }
 
-function removeLang(l) {
+window.removeLang = function removeLang(l) {
   langs = langs.filter(x => x !== l);
   renderLangTags();
   update();
@@ -704,8 +727,71 @@ function renderLangTags() {
   wrap.innerHTML = langs.map(l => `<span class="skill-tag">${l}<button onclick="removeLang('${l}')">✕</button></span>`).join('');
 }
 
+// ── AI SUMMARY GENERATOR ──────────────────────────────────────
+window.generateAISummary = async function generateAISummary() {
+  const jobRole = v('f-jobrole');
+  if (!jobRole) { showToast('⚠️ Pehle job role likho!'); return; }
+
+  const name = v('f-name') || 'the candidate';
+  const exp = document.getElementById('f-experience').value;
+  const skills_list = skills.length ? skills.join(', ') : '';
+
+  const btn = document.getElementById('ai-btn');
+  const btnText = document.getElementById('ai-btn-text');
+  const status = document.getElementById('ai-status');
+
+  btn.disabled = true;
+  btnText.textContent = '⏳ Generating...';
+  status.style.display = 'block';
+  status.textContent = 'AI likh raha hai summary...';
+
+  const expText = exp === 'fresher' ? 'a fresher with no prior experience' :
+    exp === '1-2' ? '1-2 years of experience' :
+    exp === '3-5' ? '3-5 years of experience' : '5+ years of experience';
+
+  const prompt = `Write a professional resume objective/summary for an Indian job seeker applying for the role of "${jobRole}". They are ${expText}.${skills_list ? ` Their key skills are: ${skills_list}.` : ''} 
+
+Write ONLY the summary paragraph (3-4 sentences). Make it professional, specific to the job role, and suitable for Indian job market. Do not include any heading or label. Just the paragraph text.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await res.json();
+    const summary = data.content?.[0]?.text?.trim();
+
+    if (summary) {
+      document.getElementById('f-summary').value = summary;
+      // Also auto-fill job title if empty
+      if (!v('f-title')) {
+        document.getElementById('f-title').value = jobRole;
+      }
+      update();
+      showToast('✅ AI Summary ready!');
+      status.textContent = '✅ Summary generated! Aap edit bhi kar sakte ho.';
+      status.style.color = '#4ECDA4';
+    } else {
+      throw new Error('Empty response');
+    }
+  } catch(e) {
+    showToast('❌ Error! Dobara try karo.');
+    status.textContent = '❌ Kuch error aaya. Dobara try karo.';
+    status.style.color = '#FF6B6B';
+  } finally {
+    btn.disabled = false;
+    btnText.textContent = '✨ Generate AI Summary & Description';
+  }
+}
+
 // ── UPDATE RESUME ─────────────────────────────────────────────
-function update() {
+window.update = function update() {
   const name = v('f-name') || 'Your Name';
   const title = v('f-title') || 'Job Title / Designation';
   const phone = v('f-phone') || '+91 XXXXX XXXXX';
@@ -808,7 +894,7 @@ function v(id) { return document.getElementById(id)?.value?.trim() || ''; }
 function t(id, txt) { const el = document.getElementById(id); if (el) el.textContent = txt; }
 
 // ── PDF DOWNLOAD ──────────────────────────────────────────────
-function downloadPDF() {
+window.downloadPDF = function downloadPDF() {
   const name = v('f-name') || 'Resume';
   const el = document.getElementById('resume-output');
   const opt = {
@@ -822,7 +908,7 @@ function downloadPDF() {
   html2pdf().set(opt).from(el).save().then(() => showToast('✅ PDF Downloaded!'));
 }
 
-function clearAll() {
+window.clearAll = function clearAll() {
   if (!confirm('Reset all fields?')) return;
   document.querySelectorAll('input, textarea, select').forEach(el => el.value = '');
   document.getElementById('edu-entries').innerHTML = '';
@@ -832,17 +918,3 @@ function clearAll() {
   eduCount = 0; expCount = 0;
   update();
   showToast('✅ Form cleared!');
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
-}
-
-// Init
-update();
-</script>
-</body>
-</html>
