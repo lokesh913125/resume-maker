@@ -255,7 +255,7 @@
     }
 
     /* ── PREVIEW PANEL ── */
-    .preview-panel { }
+   
     .preview-toolbar {
       background: var(--white);
       border-radius: 10px;
@@ -388,7 +388,7 @@
 
     /* Skills */
     .r-skill-list { display: flex; flex-direction: column; gap: 8px; }
-    .r-skill-item { }
+    
     .r-skill-name { font-size: 0.82rem; font-weight: 600; color: var(--ink); margin-bottom: 4px; display: flex; justify-content: space-between; }
     .r-skill-bar { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
     .r-skill-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--gold)); border-radius: 99px; }
@@ -595,7 +595,7 @@
 <div class="toast" id="toast"></div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// ── STATE ─────────────────────────────────────────────────────
+  // ── STATE ─────────────────────────────────────────────────────
 let skills = [];
 let langs = [];
 let eduCount = 0;
@@ -640,6 +640,7 @@ window.addEdu = function addEdu() {
   update();
 }
 
+
 window.addExp = function addExp() {
   const id = ++expCount;
   const wrap = document.getElementById('exp-entries');
@@ -657,7 +658,7 @@ window.addExp = function addExp() {
     <div class="form-row"><label>Key Responsibilities</label><textarea placeholder="• Developed REST APIs using Node.js&#10;• Reduced load time by 30%&#10;• Worked in Agile team of 8" oninput="update()"></textarea></div>
   `;
   wrap.appendChild(div);
-  update();
+  window.update();
 }
 
 window.removeEntry = function removeEntry(id) {
@@ -836,3 +837,17 @@ window.clearAll = function clearAll() {
   eduCount = 0; expCount = 0;
   update();
   showToast('✅ Form cleared!');
+}
+
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+</script>
+</body>
+
+</html>
